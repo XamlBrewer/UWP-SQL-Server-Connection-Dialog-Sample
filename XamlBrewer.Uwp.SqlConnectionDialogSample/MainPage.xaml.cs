@@ -68,6 +68,7 @@ namespace XamlBrewer.Uwp.SqlConnectionDialogSample
             if (result == ContentDialogResult.None)
             {
                 Status = previousStatus;
+                return;
             }
 
             var connectionString = dialog.ConnectionString;
