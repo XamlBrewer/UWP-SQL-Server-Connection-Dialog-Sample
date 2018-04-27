@@ -1,0 +1,176 @@
+﻿<ContentDialog x:Class="XamlBrewer.SqlClient.ConnectionDialog"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:local="using:XamlBrewer.Uwp.SqlConnectionDialogSample"
+               xmlns:sql="using:XamlBrewer.SqlClient"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               mc:Ignorable="d"
+               PrimaryButtonText="Test"
+               SecondaryButtonText="Connect"
+               CloseButtonText="Cancel"
+               PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+               SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+               FontFamily="Segoe UI">
+
+    <ContentDialog.Resources>
+        <!-- Created by Knut M. Synstad from the Noun Project. -->
+        <x:String x:Key="DatabaseIcon">M41.3339844,38.1669922H26.9882812c-0.3154297-0.9384766-1.0517578-1.6748047-1.9902344-1.9892578v-6.8613281  c4.4619141-0.1494141,8.6669922-1.3066406,8.6669922-3.6904297h-0.0009766v-5.4086914  c0-0.0029297,0.0009766-0.0053711,0.0009766-0.0083008h-0.0009766V9.375c0-2.5615234-4.8544922-3.7080078-9.6660156-3.7080078  S14.3320312,6.8134766,14.3320312,9.375v16.2509766c0,2.3837891,4.2045898,3.5410156,8.6660156,3.6904297v6.8613281  c-0.9384766,0.3144531-1.6743164,1.0507812-1.9897461,1.9892578H6.6660156c-0.5522461,0-1,0.4472656-1,1s0.4477539,1,1,1h14.3422852  c0.4213867,1.2548828,1.5952148,2.1669922,2.9897461,2.1669922s2.5683594-0.9121094,2.9902344-2.1669922h14.3457031  c0.5527344,0,1-0.4472656,1-1S41.8867188,38.1669922,41.3339844,38.1669922z M16.3320312,11.7719727  c1.8588867,0.8920898,4.7666016,1.3120117,7.6660156,1.3120117s5.8066406-0.4199219,7.6660156-1.3120117v2.9926758  C31.4736328,15.2626953,28.9326172,16.5,23.9980469,16.5c-4.9331055,0-7.4731445-1.2368164-7.6660156-1.7348633V11.7719727z   M23.9980469,7.6669922c4.9472656,0,7.4912109,1.2451172,7.6699219,1.6757812  c-0.1777344,0.4956055-2.7216797,1.7412109-7.6699219,1.7412109c-4.9331055,0-7.4731445-1.2373047-7.6660156-1.6713867V9.4023438  C16.5253906,8.9038086,19.0664062,7.6669922,23.9980469,7.6669922z M16.3320312,17.1884766  C18.190918,18.0800781,21.0986328,18.5,23.9980469,18.5s5.8066406-0.4199219,7.6660156-1.3115234v2.9941406  c-0.1933594,0.4990234-2.7333984,1.7353516-7.6660156,1.7353516c-4.9482422,0-7.4916992-1.2456055-7.6660156-1.7089844V17.1884766z   M16.3320312,25.5996094V22.605957c1.8588867,0.8920898,4.7666016,1.3120117,7.6660156,1.3120117  s5.8066406-0.4199219,7.6660156-1.3115234v2.9931641c-0.1933594,0.4990234-2.7333984,1.734375-7.6650391,1.734375l0,0  c-0.0004883,0-0.0004883,0-0.0009766,0C19.0649414,27.3339844,16.5249023,26.0976562,16.3320312,25.5996094z M23.9980469,40.3339844  c-0.6435547,0-1.1669922-0.5234375-1.1669922-1.1669922S23.3544922,38,23.9980469,38s1.1669922,0.5234375,1.1669922,1.1669922  S24.6416016,40.3339844,23.9980469,40.3339844z</x:String>
+    </ContentDialog.Resources>
+
+    <ContentDialog.TitleTemplate>
+        <DataTemplate>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Path Width="32"
+                          Height="32"
+                          Fill="Black"
+                          Margin="0 0 20 0"
+                          Stretch="Fill"
+                          Data="{StaticResource DatabaseIcon}" />
+                    <TextBlock Text="Connect to SQL Server"
+                               FontSize="24" />
+                </StackPanel>
+
+            </StackPanel>
+        </DataTemplate>
+    </ContentDialog.TitleTemplate>
+    <StackPanel>
+        <ProgressBar IsIndeterminate="{x:Bind IsBusy, Mode=OneWay}"
+                     Margin="0 0 0 10"
+                     FontFamily="Segoe UI" />
+        <Grid x:Name="DefaultGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <Button Click="DirectButton_Click"
+                    Content="..."
+                    VerticalAlignment="Stretch"
+                    Width="32"
+                    Height="32"
+                    Grid.Row="1" />
+
+            <TextBlock Text="Server"
+                       HorizontalAlignment="Right"
+                       HorizontalTextAlignment="Right"
+                       Margin="0 10 10 10"
+                       FontFamily="Segoe UI"
+                       Grid.Row="1" />
+            <Grid VerticalAlignment="Top"
+                  Margin="10 10 0 10"
+                  Grid.Column="1"
+                  Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="240" />
+                    <ColumnDefinition Width="32" />
+                </Grid.ColumnDefinitions>
+                <AutoSuggestBox x:Name="SuggestBox"
+                                Text="{x:Bind Server, Mode=TwoWay}"
+                                ItemsSource="{x:Bind MostRecentConnections}"
+                                VerticalAlignment="Stretch"
+                                IsSuggestionListOpen="{Binding IsChecked, ElementName=Toggle, Mode=TwoWay}"
+                                FontFamily="Segoe UI" />
+                <ToggleButton x:Name="Toggle"
+                              Grid.Column="1"
+                              VerticalAlignment="Stretch"
+                              Width="32"
+                              Background="Transparent"
+                              FontFamily="Segoe UI">
+                    <FontIcon Foreground="{ThemeResource ComboBoxDropDownGlyphForeground}"
+                              FontSize="12"
+                              FontFamily="Segoe MDL2 Assets"
+                              Glyph="&#xE0E5;"
+                              IsHitTestVisible="False" />
+                </ToggleButton>
+            </Grid>
+            <TextBlock Text="Authentication"
+                       Grid.Row="2"
+                       HorizontalAlignment="Right"
+                       HorizontalTextAlignment="Right"
+                       Margin="0 10 10 10"
+                       FontFamily="Segoe UI" />
+            <ComboBox x:Name="AuthenticationComboBox"
+                      SelectionChanged="Authentication_SelectionChanged"
+                      HorizontalAlignment="Stretch"
+                      Margin="10 10 0 10"
+                      Grid.Row="2"
+                      Grid.Column="1">
+                <ComboBoxItem>Windows Authentication</ComboBoxItem>
+                <ComboBoxItem>SQL Server Authentication</ComboBoxItem>
+                <!--<ComboBoxItem FontFamily="Segoe UI">Active Directory Authentication</ComboBoxItem>-->
+            </ComboBox>
+            <TextBlock Text="User Id"
+                       Grid.Row="3"
+                       HorizontalAlignment="Right"
+                       HorizontalTextAlignment="Right"
+                       Margin="10"
+                       FontFamily="Segoe UI" />
+            <TextBox Text="{x:Bind UserId, Mode=TwoWay}"
+                     IsEnabled="{x:Bind SqlSecurity, Mode=OneWay}"
+                     Margin="30 10 0 10"
+                     Grid.Row="3"
+                     Grid.Column="1" />
+            <TextBlock Text="Password"
+                       Grid.Row="4"
+                       HorizontalAlignment="Right"
+                       HorizontalTextAlignment="Right"
+                       Margin="0 10 10 10"
+                       FontFamily="Segoe UI" />
+            <PasswordBox Password="{x:Bind Password, Mode=TwoWay}"
+                         IsEnabled="{x:Bind SqlSecurity, Mode=OneWay}"
+                         Margin="30 10 0 10"
+                         Grid.Row="4"
+                         Grid.Column="1" />
+            <TextBlock Text="Database"
+                       Grid.Row="5"
+                       HorizontalAlignment="Right"
+                       HorizontalTextAlignment="Right"
+                       Margin="10"
+                       FontFamily="Segoe UI" />
+            <ComboBox x:Name="DatabaseComboBox"
+                      DropDownOpened="DatabaseComboBox_DropDownOpened"
+                      ItemsSource="{x:Bind Databases, Mode=OneWay}"
+                      SelectionChanged="Database_SelectionChanged"
+                      Margin="10 10 0 10"
+                      HorizontalAlignment="Stretch"
+                      Grid.Row="5"
+                      Grid.Column="1" />
+        </Grid>
+        <Grid x:Name="DirectGrid"
+              Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Click="DefaultButton_Click"
+                    VerticalAlignment="Stretch"
+                    Width="32"
+                    Height="32"
+                    Grid.Row="0"
+                    FontFamily="Segoe UI">&lt;</Button>
+
+            <TextBlock Text="Connection String"
+                       HorizontalAlignment="Right"
+                       HorizontalTextAlignment="Right"
+                       Margin="0 10 10 10"
+                       FontFamily="Segoe UI"
+                       Grid.Row="0" />
+            <TextBox Text="{x:Bind ConnectionString, Mode=TwoWay}"
+                     TextWrapping="Wrap"
+                     VerticalAlignment="Stretch"
+                     HorizontalAlignment="Stretch"
+                     Grid.Row="1" />
+        </Grid>
+    </StackPanel>
+
+</ContentDialog>
