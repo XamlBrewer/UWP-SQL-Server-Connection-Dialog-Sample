@@ -53,6 +53,38 @@
         </StackPanel>
 
         <!-- Query Results -->
+        <GridView ItemsSource="{x:Bind Tables, Mode=OneWay}"
+                  Grid.Column="1"
+                  Grid.Row="2"
+                  FontFamily="Segoe UI">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="local:SqlTable">
+                    <Grid Height="160"
+                          Width="160"
+                          Background="Silver">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Schema}"
+                                   Margin="8 8 8 4" />
+                        <TextBlock Text="{Binding Name}"
+                                   Foreground="{StaticResource SqlServerRouge}"
+                                   FontWeight="SemiBold"
+                                   Margin="8 0"
+                                   Grid.Row="1" />
+                        <TextBlock HorizontalAlignment="Stretch"
+                                   HorizontalTextAlignment="Center"
+                                   Foreground="White"
+                                   FontSize="48"
+                                   Margin="8"
+                                   Grid.Row="2"><Run Text="{Binding NumberOfRows}" /><LineBreak /><Run Text="rows"
+                                                                                                       FontSize="12" /></TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
 
         <!-- XAML Brewer Logo -->
         <Viewbox Grid.Row="3"
