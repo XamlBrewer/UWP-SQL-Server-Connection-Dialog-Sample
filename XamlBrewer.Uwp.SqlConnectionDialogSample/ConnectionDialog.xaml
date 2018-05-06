@@ -462,145 +462,156 @@
             </StackPanel>
         </DataTemplate>
     </ContentDialog.TitleTemplate>
-    
+
     <!-- Dialog Content. -->
-    <StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <ProgressBar IsIndeterminate="{x:Bind IsBusy, Mode=OneWay}"
                      Margin="0 0 0 10"
                      FontFamily="Segoe UI" />
-        <Grid x:Name="DefaultGrid">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+        <Grid x:Name="Host"
+              Grid.Row="1">
+            <Grid x:Name="DirectGrid"
+                  Opacity="0"
+                  Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Button Click="DefaultButton_Click"
+                        VerticalAlignment="Stretch"
+                        Width="32"
+                        Height="32"
+                        Grid.Row="0"
+                        FontFamily="Segoe UI">&lt;</Button>
 
-            <Button Click="DirectButton_Click"
-                    Content="..."
-                    VerticalAlignment="Stretch"
-                    Width="32"
-                    Height="32"
-                    Grid.Row="1" />
-
-            <TextBlock Text="Server"
-                       HorizontalAlignment="Right"
-                       HorizontalTextAlignment="Right"
-                       Margin="0 10 10 10"
-                       FontFamily="Segoe UI"
-                       Grid.Row="1" />
-            <Grid VerticalAlignment="Top"
-                  Margin="10 10 0 10"
-                  Grid.Column="1"
+                <TextBlock Text="Connection String"
+                           HorizontalAlignment="Right"
+                           HorizontalTextAlignment="Right"
+                           Margin="0 10 10 10"
+                           FontFamily="Segoe UI"
+                           Grid.Row="0" />
+                <TextBox Text="{x:Bind ConnectionString, Mode=TwoWay}"
+                         TextWrapping="Wrap"
+                         VerticalAlignment="Stretch"
+                         HorizontalAlignment="Stretch"
+                         Grid.Row="1" />
+            </Grid>
+            <Grid x:Name="DefaultGrid"
                   Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="240" />
-                    <ColumnDefinition Width="32" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <AutoSuggestBox x:Name="SuggestBox"
-                                Style="{StaticResource AutoSuggestBoxNoSpellCheckingStyle}"
-                                Text="{x:Bind Server, Mode=TwoWay}"
-                                ItemsSource="{x:Bind MostRecentConnections}"
-                                VerticalAlignment="Stretch"
-                                IsSuggestionListOpen="{Binding IsChecked, ElementName=Toggle, Mode=TwoWay}"
-                                FontFamily="Segoe UI" />
-                <ToggleButton x:Name="Toggle"
-                              Grid.Column="1"
-                              VerticalAlignment="Stretch"
-                              Width="32"
-                              Background="Transparent"
-                              FontFamily="Segoe UI">
-                    <FontIcon Foreground="{ThemeResource ComboBoxDropDownGlyphForeground}"
-                              FontSize="12"
-                              FontFamily="Segoe MDL2 Assets"
-                              Glyph="&#xE0E5;"
-                              IsHitTestVisible="False" />
-                </ToggleButton>
-            </Grid>
-            <TextBlock Text="Authentication"
-                       Grid.Row="2"
-                       HorizontalAlignment="Right"
-                       HorizontalTextAlignment="Right"
-                       Margin="0 10 10 10"
-                       FontFamily="Segoe UI" />
-            <ComboBox x:Name="AuthenticationComboBox"
-                      SelectionChanged="Authentication_SelectionChanged"
-                      HorizontalAlignment="Stretch"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+
+                <Button Click="DirectButton_Click"
+                        Content="..."
+                        VerticalAlignment="Stretch"
+                        Width="32"
+                        Height="32"
+                        Grid.Row="1" />
+
+                <TextBlock Text="Server"
+                           HorizontalAlignment="Right"
+                           HorizontalTextAlignment="Right"
+                           Margin="0 10 10 10"
+                           FontFamily="Segoe UI"
+                           Grid.Row="1" />
+                <Grid VerticalAlignment="Top"
                       Margin="10 10 0 10"
-                      Grid.Row="2"
-                      Grid.Column="1">
-                <ComboBoxItem>Windows Authentication</ComboBoxItem>
-                <ComboBoxItem>SQL Server Authentication</ComboBoxItem>
-                <!--<ComboBoxItem FontFamily="Segoe UI">Active Directory Authentication</ComboBoxItem>-->
-            </ComboBox>
-            <TextBlock Text="User Id"
-                       Grid.Row="3"
-                       HorizontalAlignment="Right"
-                       HorizontalTextAlignment="Right"
-                       Margin="10"
-                       FontFamily="Segoe UI" />
-            <TextBox Text="{x:Bind UserId, Mode=TwoWay}"
-                     IsEnabled="{x:Bind SqlSecurity, Mode=OneWay}"
-                     Margin="30 10 0 10"
-                     Grid.Row="3"
-                     Grid.Column="1" />
-            <TextBlock Text="Password"
-                       Grid.Row="4"
-                       HorizontalAlignment="Right"
-                       HorizontalTextAlignment="Right"
-                       Margin="0 10 10 10"
-                       FontFamily="Segoe UI" />
-            <PasswordBox Password="{x:Bind Password, Mode=TwoWay}"
+                      Grid.Column="1"
+                      Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="240" />
+                        <ColumnDefinition Width="32" />
+                    </Grid.ColumnDefinitions>
+                    <AutoSuggestBox x:Name="SuggestBox"
+                                    Style="{StaticResource AutoSuggestBoxNoSpellCheckingStyle}"
+                                    Text="{x:Bind Server, Mode=TwoWay}"
+                                    ItemsSource="{x:Bind MostRecentConnections}"
+                                    VerticalAlignment="Stretch"
+                                    IsSuggestionListOpen="{Binding IsChecked, ElementName=Toggle, Mode=TwoWay}"
+                                    FontFamily="Segoe UI" />
+                    <ToggleButton x:Name="Toggle"
+                                  Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  Width="32"
+                                  Background="Transparent"
+                                  FontFamily="Segoe UI">
+                        <FontIcon Foreground="{ThemeResource ComboBoxDropDownGlyphForeground}"
+                                  FontSize="12"
+                                  FontFamily="Segoe MDL2 Assets"
+                                  Glyph="&#xE0E5;"
+                                  IsHitTestVisible="False" />
+                    </ToggleButton>
+                </Grid>
+                <TextBlock Text="Authentication"
+                           Grid.Row="2"
+                           HorizontalAlignment="Right"
+                           HorizontalTextAlignment="Right"
+                           Margin="0 10 10 10"
+                           FontFamily="Segoe UI" />
+                <ComboBox x:Name="AuthenticationComboBox"
+                          SelectionChanged="Authentication_SelectionChanged"
+                          HorizontalAlignment="Stretch"
+                          Margin="10 10 0 10"
+                          Grid.Row="2"
+                          Grid.Column="1">
+                    <ComboBoxItem>Windows Authentication</ComboBoxItem>
+                    <ComboBoxItem>SQL Server Authentication</ComboBoxItem>
+                    <!--<ComboBoxItem FontFamily="Segoe UI">Active Directory Authentication</ComboBoxItem>-->
+                </ComboBox>
+                <TextBlock Text="User Id"
+                           Grid.Row="3"
+                           HorizontalAlignment="Right"
+                           HorizontalTextAlignment="Right"
+                           Margin="10"
+                           FontFamily="Segoe UI" />
+                <TextBox Text="{x:Bind UserId, Mode=TwoWay}"
                          IsEnabled="{x:Bind SqlSecurity, Mode=OneWay}"
                          Margin="30 10 0 10"
-                         Grid.Row="4"
+                         Grid.Row="3"
                          Grid.Column="1" />
-            <TextBlock Text="Database"
-                       Grid.Row="5"
-                       HorizontalAlignment="Right"
-                       HorizontalTextAlignment="Right"
-                       Margin="10"
-                       FontFamily="Segoe UI" />
-            <ComboBox x:Name="DatabaseComboBox"
-                      DropDownOpened="DatabaseComboBox_DropDownOpened"
-                      ItemsSource="{x:Bind Databases, Mode=OneWay}"
-                      SelectionChanged="Database_SelectionChanged"
-                      Margin="10 10 0 10"
-                      HorizontalAlignment="Stretch"
-                      Grid.Row="5"
-                      Grid.Column="1" />
-        </Grid>
-        <Grid x:Name="DirectGrid"
-              Visibility="Collapsed">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Button Click="DefaultButton_Click"
-                    VerticalAlignment="Stretch"
-                    Width="32"
-                    Height="32"
-                    Grid.Row="0"
-                    FontFamily="Segoe UI">&lt;</Button>
+                <TextBlock Text="Password"
+                           Grid.Row="4"
+                           HorizontalAlignment="Right"
+                           HorizontalTextAlignment="Right"
+                           Margin="0 10 10 10"
+                           FontFamily="Segoe UI" />
+                <PasswordBox Password="{x:Bind Password, Mode=TwoWay}"
+                             IsEnabled="{x:Bind SqlSecurity, Mode=OneWay}"
+                             Margin="30 10 0 10"
+                             Grid.Row="4"
+                             Grid.Column="1" />
+                <TextBlock Text="Database"
+                           Grid.Row="5"
+                           HorizontalAlignment="Right"
+                           HorizontalTextAlignment="Right"
+                           Margin="10"
+                           FontFamily="Segoe UI" />
+                <ComboBox x:Name="DatabaseComboBox"
+                          DropDownOpened="DatabaseComboBox_DropDownOpened"
+                          ItemsSource="{x:Bind Databases, Mode=OneWay}"
+                          SelectionChanged="Database_SelectionChanged"
+                          Margin="10 10 0 10"
+                          HorizontalAlignment="Stretch"
+                          Grid.Row="5"
+                          Grid.Column="1" />
+            </Grid>
 
-            <TextBlock Text="Connection String"
-                       HorizontalAlignment="Right"
-                       HorizontalTextAlignment="Right"
-                       Margin="0 10 10 10"
-                       FontFamily="Segoe UI"
-                       Grid.Row="0" />
-            <TextBox Text="{x:Bind ConnectionString, Mode=TwoWay}"
-                     TextWrapping="Wrap"
-                     VerticalAlignment="Stretch"
-                     HorizontalAlignment="Stretch"
-                     Grid.Row="1" />
         </Grid>
-    </StackPanel>
+
+    </Grid>
 
 </ContentDialog>

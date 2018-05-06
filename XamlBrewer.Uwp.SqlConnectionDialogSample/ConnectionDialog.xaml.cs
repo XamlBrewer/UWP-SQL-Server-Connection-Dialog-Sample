@@ -267,15 +267,19 @@ namespace XamlBrewer.SqlClient
             UserId = builder.UserID;
             Password = builder.Password;
             DatabaseComboBox.SelectedValue = builder.InitialCatalog;
-            DefaultGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            DirectGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            DefaultGrid.Opacity = 1;
+            DirectGrid.Opacity = 0;
+            Host.Children.Remove(DirectGrid);
+            Host.Children.Insert(0, DirectGrid);
         }
 
         private void DirectButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             ConnectionString = builder.ConnectionString;
-            DirectGrid.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            DefaultGrid.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            DirectGrid.Opacity = 1;
+            DefaultGrid.Opacity = 0;
+            Host.Children.Remove(DefaultGrid);
+            Host.Children.Insert(0, DefaultGrid);
         }
 
         private async void DatabaseComboBox_DropDownOpened(object sender, object e)
