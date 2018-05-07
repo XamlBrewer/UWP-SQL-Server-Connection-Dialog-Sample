@@ -10,6 +10,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace XamlBrewer.SqlClient
 {
+    /// <summary>
+    /// A dialog to configure and test a connection to a SQL Server database.
+    /// </summary>
     public sealed partial class ConnectionDialog : ContentDialog, INotifyPropertyChanged
     {
         private bool isBusy;
@@ -34,6 +37,9 @@ namespace XamlBrewer.SqlClient
             mostRecentConnections = ReadMostRecentConnections();
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is busy.
+        /// </summary>
         public bool IsBusy
         {
             get { return isBusy; }
@@ -44,11 +50,17 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets the most recently succesfully used server names.
+        /// </summary>
         public List<string> MostRecentConnections
         {
             get { return mostRecentConnections; }
         }
 
+        /// <summary>
+        /// Gets or sets the most recently succesfully used server name.
+        /// </summary>
         public string MostRecentConnection
         {
             get { return MostRecentConnections.FirstOrDefault(); }
@@ -69,6 +81,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current server name.
+        /// </summary>
         public string Server
         {
             get { return server; }
@@ -80,6 +95,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets or sets whether integrated security is used for authentication.
+        /// </summary>
         public bool? IntegratedSecurity
         {
             get { return integratedSecurity; }
@@ -96,6 +114,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets or sets the SQL user identifier.
+        /// </summary>
         public string UserId
         {
             get { return userId; }
@@ -106,6 +127,10 @@ namespace XamlBrewer.SqlClient
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Gets or sets the SQL password.
+        /// </summary>
         public string Password
         {
             get { return password; }
@@ -117,6 +142,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets or sets the list of databases.
+        /// </summary>
         public List<string> Databases
         {
             get { return databases; }
@@ -126,6 +154,10 @@ namespace XamlBrewer.SqlClient
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Gets or sets the current database.
+        /// </summary>
         public string Database
         {
             get { return database; }
@@ -137,6 +169,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current connection string.
+        /// </summary>
         public string ConnectionString
         {
             get { return connectionString; }
@@ -148,6 +183,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating whether SQL security is used for authentication.
+        /// </summary>
         public bool SqlSecurity
         {
             get { return IntegratedSecurity.HasValue && !IntegratedSecurity.Value; }
@@ -158,6 +196,9 @@ namespace XamlBrewer.SqlClient
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        /// <summary>
+        /// Tests the current connection and shows the result in a message dialog.
+        /// </summary>
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             IsBusy = true;
@@ -202,6 +243,9 @@ namespace XamlBrewer.SqlClient
             });
         }
 
+        /// <summary>
+        /// Connects to the database. Closes the dialog and returns the connection string if successful.
+        /// </summary>
         private async void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             IsBusy = true;
@@ -260,6 +304,9 @@ namespace XamlBrewer.SqlClient
             }
         }
 
+        /// <summary>
+        /// Shows the default input panel.
+        /// </summary>
         private void DefaultButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             Server = builder.DataSource;
@@ -267,21 +314,29 @@ namespace XamlBrewer.SqlClient
             UserId = builder.UserID;
             Password = builder.Password;
             DatabaseComboBox.SelectedValue = builder.InitialCatalog;
+
             DefaultGrid.Opacity = 1;
             DirectGrid.Opacity = 0;
             Host.Children.Remove(DirectGrid);
             Host.Children.Insert(0, DirectGrid);
         }
 
+        /// <summary>
+        /// Shows the direct input panel (connectionstring).
+        /// </summary>
         private void DirectButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             ConnectionString = builder.ConnectionString;
+
             DirectGrid.Opacity = 1;
             DefaultGrid.Opacity = 0;
             Host.Children.Remove(DefaultGrid);
             Host.Children.Insert(0, DefaultGrid);
         }
 
+        /// <summary>
+        /// Connects to the server and fetches the list of databases.
+        /// </summary>
         private async void DatabaseComboBox_DropDownOpened(object sender, object e)
         {
             if (string.IsNullOrWhiteSpace(Server))
@@ -334,6 +389,10 @@ namespace XamlBrewer.SqlClient
                 IsBusy = false;
             });
         }
+
+        /// <summary>
+        /// Reads the most recent connections from local settings.
+        /// </summary>
         private List<String> ReadMostRecentConnections()
         {
             try
@@ -350,6 +409,9 @@ namespace XamlBrewer.SqlClient
             return new List<string>();
         }
 
+        /// <summary>
+        /// Writes the most recent connections to local settings.
+        /// </summary>
         private void SaveMostRecentConnections()
         {
             try

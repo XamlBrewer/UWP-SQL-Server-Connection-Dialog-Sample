@@ -1,8 +1,6 @@
 ﻿<ContentDialog x:Class="XamlBrewer.SqlClient.ConnectionDialog"
                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               xmlns:local="using:XamlBrewer.Uwp.SqlConnectionDialogSample"
-               xmlns:sql="using:XamlBrewer.SqlClient"
                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                mc:Ignorable="d"
@@ -474,6 +472,7 @@
                      FontFamily="Segoe UI" />
         <Grid x:Name="Host"
               Grid.Row="1">
+            <!-- Direct Connectionstring Input Panel -->
             <Grid x:Name="DirectGrid"
                   Opacity="0"
                   Grid.Row="1">
@@ -500,6 +499,7 @@
                          HorizontalAlignment="Stretch"
                          Grid.Row="1" />
             </Grid>
+            <!-- Default Input Panel -->
             <Grid x:Name="DefaultGrid"
                   Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -609,9 +609,6 @@
                           Grid.Row="5"
                           Grid.Column="1" />
             </Grid>
-
         </Grid>
-
     </Grid>
-
 </ContentDialog>
