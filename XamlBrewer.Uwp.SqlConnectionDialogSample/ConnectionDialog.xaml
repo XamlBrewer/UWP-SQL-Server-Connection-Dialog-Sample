@@ -493,11 +493,13 @@
                            Margin="0 10 10 10"
                            FontFamily="Segoe UI"
                            Grid.Row="0" />
-                <TextBox Text="{x:Bind ConnectionString, Mode=TwoWay}"
+                <TextBox Text="{x:Bind ConnectionString, Mode=TwoWay}" 
+                         IsSpellCheckEnabled="False"
                          TextWrapping="Wrap"
                          VerticalAlignment="Stretch"
                          HorizontalAlignment="Stretch"
-                         Grid.Row="1" />
+                         Grid.Row="1"
+                         FontFamily="Segoe UI" />
             </Grid>
             <!-- Default Input Panel -->
             <Grid x:Name="DefaultGrid"
