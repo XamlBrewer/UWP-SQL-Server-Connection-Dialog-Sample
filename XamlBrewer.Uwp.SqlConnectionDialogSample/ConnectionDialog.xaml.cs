@@ -204,43 +204,35 @@ namespace XamlBrewer.SqlClient
             IsBusy = true;
             args.Cancel = true;
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            try
             {
-                IsBusy = true;
-            });
+                using (SqlConnection con = new SqlConnection(builder.ConnectionString))
+                {
+                    await con.OpenAsync();
+                }
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                var msg = new MessageDialog("Connection Successful")
+                {
+                    Title = "OK"
+                };
+
+                await msg.ShowAsync();
+            }
+            catch (Exception ex)
             {
-                try
+                args.Cancel = true;
+
+                var msg = new MessageDialog(ex.Message)
                 {
-                    using (SqlConnection con = new SqlConnection(builder.ConnectionString))
-                    {
-                        con.Open();
-                    }
+                    Title = "Error"
+                };
 
-                    var msg = new MessageDialog("Connection Successful")
-                    {
-                        Title = "OK"
-                    };
-
-                    await msg.ShowAsync();
-                }
-                catch (Exception ex)
-                {
-                    args.Cancel = true;
-
-                    var msg = new MessageDialog(ex.Message)
-                    {
-                        Title = "Error"
-                    };
-
-                    await msg.ShowAsync();
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            });
+                await msg.ShowAsync();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         /// <summary>
@@ -250,40 +242,32 @@ namespace XamlBrewer.SqlClient
         {
             IsBusy = true;
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
+            try
             {
-                IsBusy = true;
-            });
+                using (SqlConnection con = new SqlConnection(builder.ConnectionString))
+                {
+                    await con.OpenAsync();
+                }
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, async () =>
+                MostRecentConnection = Server;
+                ConnectionString = builder.ConnectionString;
+            }
+            catch (Exception ex)
             {
-                try
+                args.Cancel = true;
+                var msg = new MessageDialog(ex.Message)
                 {
-                    using (SqlConnection con = new SqlConnection(builder.ConnectionString))
-                    {
-                        con.Open();
-                    }
+                    Title = "Error"
+                };
 
-                    MostRecentConnection = Server;
-                    ConnectionString = builder.ConnectionString;
-                }
-                catch (Exception ex)
-                {
-                    args.Cancel = true;
-                    var msg = new MessageDialog(ex.Message)
-                    {
-                        Title = "Error"
-                    };
-
-                    await msg.ShowAsync();
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-
+                await msg.ShowAsync();
+            }
+            finally
+            {
                 IsBusy = false;
-            });
+            }
+
+            IsBusy = false;
         }
 
         private void Authentication_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -346,48 +330,38 @@ namespace XamlBrewer.SqlClient
 
             IsBusy = true;
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.High, () =>
-            {
-                IsBusy = true;
-            });
+            var databases = new List<string>();
 
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Low, () =>
+            try
             {
-                var databases = new List<string>();
-
-                try
+                using (var connection = new SqlConnection(builder.ConnectionString))
                 {
-                    using (var connection = new SqlConnection(builder.ConnectionString))
+                    await connection.OpenAsync();
+
+                    using (var command = connection.CreateCommand())
                     {
-                        connection.Open();
+                        command.CommandText = "SELECT [name] FROM sys.databases ORDER BY [name]";
 
-                        using (var command = connection.CreateCommand())
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
                         {
-                            command.CommandText = "SELECT [name] FROM sys.databases ORDER BY [name]";
-
-                            using (SqlDataReader reader = command.ExecuteReader())
+                            while (await reader.ReadAsync())
                             {
-                                while (reader.Read())
-                                {
-                                    databases.Add(reader.GetString(0));
-                                }
+                                databases.Add(reader.GetString(0));
                             }
                         }
                     }
-
-                    Databases = databases;
-                }
-                catch (Exception)
-                {
-                    Databases = new List<string>();
-                }
-                finally
-                {
-                    IsBusy = false;
                 }
 
+                Databases = databases;
+            }
+            catch (Exception)
+            {
+                Databases = new List<string>();
+            }
+            finally
+            {
                 IsBusy = false;
-            });
+            }
         }
 
         /// <summary>
