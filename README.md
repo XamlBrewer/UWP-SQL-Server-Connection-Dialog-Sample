@@ -9,3 +9,5 @@ Demonstrates how to build a SQL Server Connection Dialog:
 * Test connection
 
 ![ScreenShot](Assets/SqlConnectionDialog.png?raw=true "Screenshot")
+
+![ScreenShot](Assets/SqlDialogDirectInput.png?raw=true "Screenshot")
