@@ -220,8 +220,6 @@ namespace XamlBrewer.SqlClient
             }
             catch (Exception ex)
             {
-                args.Cancel = true;
-
                 var msg = new MessageDialog(ex.Message)
                 {
                     Title = "Error"
